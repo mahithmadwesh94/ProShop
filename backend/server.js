@@ -1,7 +1,9 @@
 import express from 'express';
-import products from './data/products.js';
+
 import dotenv from 'dotenv';
 import ConnectDB from './config/db.js';
+import ProcutRoute from './routes/ProductRoute.js';
+import { notFound,errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
@@ -16,15 +18,13 @@ app.get('/',(req,res) =>{
 });
 
 
-app.get('/api/products',(req,res) =>{
-    res.json(products)
-})
+app.use('/api/products',ProcutRoute);
+
+app.use(notFound);
+app.use(errorHandler);
 
 
-app.get('/api/product/:id',(req,res) =>{
-    const product = products.find((p) => p._id === req.params.id);
-    res.json(product)
-})
+
 
 app.listen(port,() =>{
     `Server is running on ${port}`
